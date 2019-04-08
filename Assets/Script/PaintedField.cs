@@ -1,0 +1,96 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PaintedField : MonoBehaviour {
+
+    public Texture2D p_brush;
+
+    private Texture2D p_MaskTex;        // Mask texture instance of the shader
+    private int p_Dim;                  // Dimension of the sprite
+    private int p_Width, p_Height;      // Width and height of the sprite
+    private SpriteRenderer p_SpriteRender;
+
+    // Use this for initialization
+    void Start()
+    {
+        // Get the main sprite
+        p_SpriteRender = GetComponent<SpriteRenderer>();
+        Sprite sprite = p_SpriteRender.sprite;
+
+        // Get the dimension of the sprite
+        p_Width = (int)sprite.rect.width;
+        p_Height = (int)sprite.rect.height;
+        p_Dim = p_Width * p_Height;
+
+        // Create the mask texture and bind to the material (shader)
+        p_MaskTex = new Texture2D(p_Width, p_Height, TextureFormat.RGBA32, false);
+        p_MaskTex.filterMode = FilterMode.Point;
+        p_SpriteRender.material.SetTexture("_AlphaTex", p_MaskTex);
+
+        // Create the mask color buffer and set to white (Alpha channels are 1)
+        Color[] maskColor = new Color[p_Dim];
+        
+        for (int i = 0; i < p_Dim; i++)
+        {
+            maskColor[i] = new Color(0,0,0,0);
+        }
+        p_MaskTex.SetPixels(maskColor);
+        p_MaskTex.Apply();
+
+
+        UpdateMask(Vector3.zero);
+        UpdateMask(Vector3.one);
+    }
+
+
+    private void UpdateMask(Vector3 paint_pos)
+    {
+        int brush_w = p_brush.width/2;
+        int brush_h = p_brush.height/2;
+
+        Vector3 relative_pos = paint_pos-transform.position;
+
+        // Vector3(0, 0, z) of the relative position will be the center of the Sprite (SpriteRenderer)
+
+        // Get the boundary of the SpriteRenderer
+        Vector2 bound = new Vector2(p_SpriteRender.bounds.size.x / transform.localScale.x, p_SpriteRender.bounds.size.y / transform.localScale.y);
+
+        // Normalize the position between +/- 0.5 and move the origin to the bottom-left corner (coordinate of Texture2D)
+        Vector2 uvf = new Vector2(Mathf.Clamp(relative_pos.x, -bound.x / 2, bound.x / 2) / bound.x, Mathf.Clamp(relative_pos.y, -bound.y / 2, bound.y / 2) / bound.y);
+        uvf += new Vector2(0.5f, 0.5f);
+
+        // Get (x, y) pixel of the Texture2D
+        Vector2 centerPos = new Vector2((uvf.x * p_Width), (uvf.y * p_Height));
+        Vector2 startPos = new Vector2(centerPos.x - brush_w, centerPos.y - brush_h); // bottom-left
+        Vector2 endPos = new Vector2(centerPos.x + brush_w, centerPos.y + brush_h); // top-right
+
+        // Check boundary to prevent out of bound
+        Vector2 offsetX = new Vector2();    // Width
+        Vector2 offsetY = new Vector2();    // Height
+        if (startPos.x < 0) offsetX.x = Mathf.Abs(startPos.x);
+        if (endPos.x > p_Width) offsetX.y = endPos.x - p_Width;
+        if (startPos.y < 0) offsetY.x = Mathf.Abs(startPos.y);
+        if (endPos.y > p_Height) offsetY.y = endPos.y - p_Height;
+
+        // The real boundary
+        startPos = new Vector2((startPos.x + offsetX.x), (startPos.y + offsetY.x));
+        Vector2 range = new Vector2(brush_w * 2 - offsetX.y, brush_h * 2 - offsetY.y);
+
+        Color[] p_Circle = p_brush.GetPixels(0,0, p_brush.width, p_brush.height);
+        // Get pixels from the mask texture
+        Color[] color = p_MaskTex.GetPixels((int)startPos.x, (int)startPos.y, (int)range.x, (int)range.y);
+        for (int x = (int)offsetX.x; x < range.x - 1; x++)
+        {
+            for (int y = (int)offsetY.x; y < range.y - 1; y++)
+            {
+                if (p_Circle[x * (int)range.x + y].a != 0)
+                {
+                    color[x * (int)range.x + y] = Color.red;
+                }
+            }
+        }
+        p_MaskTex.SetPixels((int)startPos.x, (int)startPos.y, (int)range.x, (int)range.y, color);
+        p_MaskTex.Apply();
+    }
+}

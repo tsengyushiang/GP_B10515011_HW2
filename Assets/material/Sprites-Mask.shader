@@ -15,7 +15,7 @@ Shader "Sprites/Mask"
 	{
 		"Queue" = "Transparent"
 		"IgnoreProjector" = "True"
-		"RenderType" = "Transparent"
+		"RenderType" = "Opaque"
 	}
 
 		ZWrite Off
@@ -59,9 +59,17 @@ Shader "Sprites/Mask"
 
 	fixed4 frag(v2f IN) : COLOR
 	{
-		fixed4 c0 = tex2D(_MainTex, IN.texcoord) * IN.color;
-	fixed4 c1 = tex2D(_AlphaTex, IN.texcoord);
-	return fixed4(c0.rgb, min(c1.r, c0.a));
+		 fixed4 c0 = tex2D(_MainTex, IN.texcoord) * IN.color;
+		 fixed4 c1 = tex2D(_AlphaTex, IN.texcoord);
+
+		if (c1.a != 0) {
+			return c1;
+		}
+		else 
+		{
+			return c0;
+		}
+		
 	}
 		ENDCG
 	}
