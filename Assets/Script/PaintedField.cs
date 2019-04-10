@@ -80,7 +80,7 @@ public class PaintedField : MonoBehaviour {
             {
                 int index = x * (int)range.x + y;
 
-                if (index < 0 || index > p_Circle.Length || index > color.Length) continue;
+                if (index < 0 || index >= p_Circle.Length || index >= color.Length) continue;
 
                 if (p_Circle[index].a != 0)
                 {

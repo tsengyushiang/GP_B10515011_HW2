@@ -95,7 +95,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &58225399992919798
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2543b1bbda937a4459321dfd7c7a3903, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myColor: {r: 1, g: 0.07510978, b: 0, a: 0}
+  myColor: {r: 1, g: 0.07510978, b: 0, a: 1}
   speed: 500
   gunPos: 1.3
   bullet: {fileID: 1675014562301714, guid: 794db297fc0a5434289d33b5dab98028, type: 2}

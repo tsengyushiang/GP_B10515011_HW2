@@ -5,30 +5,49 @@ using UnityEngine;
 
 public class PlayerController : NetworkBehaviour
 {
+    [SyncVar (hook= "setColor")]
     public Color myColor;
     public float speed = 500;
     public float gunPos = 2;
     public GameObject bullet;
 
+
     public float shootCoolDown = 500;
     private float timeStamp = 0;
+
+    private string playerID;
+
     void Start()
     {
-        myColor.a = 1.0f;
-        GetComponent<SpriteRenderer>().color = myColor;
-        transform.GetChild(0).GetComponent<SpriteRenderer>().color = myColor;
+        setColor(myColor);
+    }
+
+    public void setColor(Color color) {
+        myColor = color;
+        SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>();
+        foreach (SpriteRenderer renderer in renderers)
+        {
+            renderer.color = color;
+        }
     }
 
     [Command]
-    public void CmdExplode(Vector3 v,Vector3 dir)
+    public void CmdExplode(Vector3 origion, Vector3 direction)
     {
-        RpcExplosion(v,dir);
-    }
+        GameObject newBullet = Instantiate(bullet);
+        newBullet.transform.position = origion;
+        newBullet.GetComponent<Rigidbody2D>().AddForce(direction * 1000);
 
-    [ClientRpc]
-    public void RpcExplosion(Vector3 origion,Vector3 gunDir)
-    {
-        GameManager.Shoot(bullet, transform.position + origion, gunDir, myColor);
+        //設定飛彈朝向的方向
+        newBullet.transform.Rotate(0, 0,
+            Mathf.Rad2Deg * Mathf.Atan(direction.y / direction.x), Space.Self);
+
+        if (direction.x > 0.0f)
+            newBullet.transform.Rotate(0, 0, 180, Space.Self);
+
+        //設定飛彈顏色
+        newBullet.GetComponent<Bullet>().setColor(myColor);
+        NetworkServer.Spawn(newBullet);
     }
 
     // Update is called once per frame
@@ -52,7 +71,7 @@ public class PlayerController : NetworkBehaviour
         //shoot
         if (Input.GetMouseButton(0) && timeStamp > shootCoolDown)
         {
-            Vector3 origion = gunDir * gunPos * 3f;
+            Vector3 origion =transform.position+ gunDir * gunPos * 3f;
             CmdExplode(origion,gunDir);
             timeStamp = 0;
         }
