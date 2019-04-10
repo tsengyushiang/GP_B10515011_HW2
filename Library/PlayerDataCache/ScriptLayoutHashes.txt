@@ -2,7 +2,7 @@ WindowsStandalone
 PlayerPath?
 C:/Users/yushiang/Desktop/GP_B10515011_HW2/build/build.exe
 SceneListBegin?
-Assets/Scenes/SampleScene.unity
+Assets/Scenes/game.unity
 SceneListEnd?
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
 cf455f7a806648c6ed4c7d3e3f8a0e03 UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationTrack
@@ -145,4 +145,7 @@ bc68edb0af574bf79f9550ead8ebae5c UnityEngine.HoloLens.dll:UnityEngine.Audio.Audi
 c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingCollider
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
-a970008928ce4adbdc527fc776a2e3da Assembly-CSharp.dll:.paintingField
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.PaintedField
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.GameManager
+5498a7c3f982171a1e01933df16281e0 Assembly-CSharp.dll:.PlayerController
+574fc27c1a73e0fd2d3ff41325dfb4a4 Assembly-CSharp.dll:.Bullet

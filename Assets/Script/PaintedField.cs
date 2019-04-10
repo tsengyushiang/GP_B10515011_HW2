@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PaintedField : MonoBehaviour {
 
-    public Texture2D p_brush;
-
     private Texture2D p_MaskTex;        // Mask texture instance of the shader
     private int p_Dim;                  // Dimension of the sprite
     private int p_Width, p_Height;      // Width and height of the sprite
@@ -37,14 +35,10 @@ public class PaintedField : MonoBehaviour {
         }
         p_MaskTex.SetPixels(maskColor);
         p_MaskTex.Apply();
-
-
-        UpdateMask(Vector3.zero);
-        UpdateMask(Vector3.one);
     }
 
 
-    private void UpdateMask(Vector3 paint_pos)
+    public void paint(Vector3 paint_pos,Texture2D p_brush,Color paintColor)
     {
         int brush_w = p_brush.width/2;
         int brush_h = p_brush.height/2;
@@ -84,9 +78,13 @@ public class PaintedField : MonoBehaviour {
         {
             for (int y = (int)offsetY.x; y < range.y - 1; y++)
             {
-                if (p_Circle[x * (int)range.x + y].a != 0)
+                int index = x * (int)range.x + y;
+
+                if (index < 0 || index > p_Circle.Length || index > color.Length) continue;
+
+                if (p_Circle[index].a != 0)
                 {
-                    color[x * (int)range.x + y] = Color.red;
+                    color[index] = paintColor;
                 }
             }
         }
