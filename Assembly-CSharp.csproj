@@ -52,11 +52,13 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Script\Bullet.cs" />
+     <Compile Include="Assets\Script\CustomNetworkGUI.cs" />
      <Compile Include="Assets\Script\EraserAI.cs" />
      <Compile Include="Assets\Script\GameItem.cs" />
      <Compile Include="Assets\Script\GameManager.cs" />
      <Compile Include="Assets\Script\PaintedField.cs" />
      <Compile Include="Assets\Script\PlayerController.cs" />
+     <None Include="Assets\StreamingAssets\config.txt" />
      <None Include="Assets\material\Sprites-Mask.shader" />
  <Reference Include="UnityEditor.StandardEvents">
  <HintPath>C:/Users/yushiang/Desktop/GP_B10515011_HW2/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>

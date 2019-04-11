@@ -12,6 +12,10 @@ public class PaintedField : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        setDefaultAlphaTex();
+    }
+
+    public void  setDefaultAlphaTex() {
         // Get the main sprite
         p_SpriteRender = GetComponent<SpriteRenderer>();
         Sprite sprite = p_SpriteRender.sprite;
@@ -28,13 +32,14 @@ public class PaintedField : MonoBehaviour {
 
         // Create the mask color buffer and set to white (Alpha channels are 1)
         Color[] maskColor = new Color[p_Dim];
-        
+
         for (int i = 0; i < p_Dim; i++)
         {
-            maskColor[i] = new Color(0,0,0,0);
+            maskColor[i] = new Color(0, 0, 0, 0);
         }
         p_MaskTex.SetPixels(maskColor);
         p_MaskTex.Apply();
+
     }
 
 

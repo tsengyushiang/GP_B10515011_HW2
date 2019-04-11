@@ -5,8 +5,15 @@ using UnityEngine;
 
 public class Bullet : NetworkBehaviour
 {
+    [SyncVar(hook ="setColor")]
     public Color mycolor;
-    
+    public Vector3 StartPoint;
+
+    public override void OnStartClient() {
+        setColor(mycolor);
+        StartPoint = transform.position;
+    }
+
     public void setColor(Color color)
     {
         mycolor = color;

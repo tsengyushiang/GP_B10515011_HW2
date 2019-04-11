@@ -6,8 +6,8 @@ using UnityEngine;
 public class GameManager : NetworkBehaviour {
 
     public static GameManager Instance;
+    public Color[] colors;
 
-    public GameObject ghost;
     public  PaintedField playGround;
 
     public Texture2D bullet;
@@ -20,7 +20,14 @@ public class GameManager : NetworkBehaviour {
     }
 
     [ClientRpc]
+    public void RpcReStart()
+    {
+        playGround.setDefaultAlphaTex();
+    }
+
+    [ClientRpc]
     public void RpcBulletHit(Vector3 pos,Color color) {
+
         PaintByBrush(pos, color, bullet);
         latestPainted = pos;
 
