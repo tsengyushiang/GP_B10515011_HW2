@@ -59,7 +59,7 @@ public class PlayerController : NetworkBehaviour
     {
         GameObject newBullet = Instantiate(bullet);
         newBullet.transform.position = origion;
-        newBullet.GetComponent<Rigidbody2D>().AddForce(direction * 1000);
+        newBullet.GetComponent<Rigidbody2D>().AddForce(direction * 500);
 
         newBullet.GetComponent<Bullet>().mycolor = color;
 

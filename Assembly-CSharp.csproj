@@ -56,6 +56,7 @@
      <Compile Include="Assets\Script\EraserAI.cs" />
      <Compile Include="Assets\Script\GameItem.cs" />
      <Compile Include="Assets\Script\GameManager.cs" />
+     <Compile Include="Assets\Script\LoadAssetBundle.cs" />
      <Compile Include="Assets\Script\PaintedField.cs" />
      <Compile Include="Assets\Script\PlayerController.cs" />
      <None Include="Assets\StreamingAssets\config.txt" />
