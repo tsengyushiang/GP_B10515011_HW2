@@ -8,7 +8,7 @@ public class GameManager : NetworkBehaviour {
     public static GameManager Instance;
     public Color[] colors;
 
-    public  PaintedField playGround;
+    public PaintedField playGround;
 
     public Texture2D bullet;
     public Texture2D ghostFootPrint;
@@ -17,6 +17,10 @@ public class GameManager : NetworkBehaviour {
 
     void Awake() {
         Instance = this;
+    }
+
+    public void OnDisable() {
+        playGround.setDefaultAlphaTex();
     }
 
     [ClientRpc]

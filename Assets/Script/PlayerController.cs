@@ -10,11 +10,14 @@ public class PlayerController : NetworkBehaviour
     public float speed = 500;
     public float gunPos = 2;
     public GameObject bullet;
+    public GameObject RepresentCurrentPlayer;
 
-    public float shootCoolDown = 500;
+    public float shootCoolDown = 800;
     private float timeStamp = 0;
 
     private string playerID;
+
+   
 
     void Start()
     {
@@ -25,15 +28,15 @@ public class PlayerController : NetworkBehaviour
            (int.Parse(GetComponent<NetworkIdentity>().netId.ToString()) % GameManager.Instance.colors.Length)
             ]);
         }
+
+        RepresentCurrentPlayer.SetActive(isLocalPlayer);
     }
 
     public override void OnStartClient()
     {
         SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>();
-        foreach (SpriteRenderer renderer in renderers)
-        {
-            renderer.color = myColor;
-        }
+        renderers[0].color = myColor;
+        renderers[1].color = myColor;
     }
 
     [Command]
@@ -47,10 +50,8 @@ public class PlayerController : NetworkBehaviour
     {
         myColor = color;
         SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>();
-        foreach (SpriteRenderer renderer in renderers)
-        {
-            renderer.color = color;
-        }
+        renderers[0].color = myColor;
+        renderers[1].color = myColor;
     }
 
     [Command]
