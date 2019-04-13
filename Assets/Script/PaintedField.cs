@@ -15,6 +15,41 @@ public class PaintedField : MonoBehaviour {
         setDefaultAlphaTex();
     }
 
+    public Color CalcResult() {
+
+        int Point1=0;
+        int Point2=0;
+
+
+        Color[] color = p_MaskTex.GetPixels(0, 0, p_Width, p_Height);
+        for (int x = 0; x < p_Width - 1; x++)
+        {
+            for (int y = 0; y< p_Height - 1; y++)
+            {
+
+                if (color[x * p_Height + y].a == 0) continue;
+                       
+                if (GameManager.Instance.colors[0].r== color[x * p_Height + y].r)
+                {
+                    Point1++;
+                }
+                else if (GameManager.Instance.colors[1].r == color[x * p_Height + y].r) {
+                    Point2++;
+                }
+             }
+        }
+
+        if (Point1 > Point2) {
+            return GameManager.Instance.colors[0];
+        }
+        else if (Point1 < Point2){
+            return GameManager.Instance.colors[1];
+        }
+        else{
+            return Color.white;
+        }
+    }
+
     public void  setDefaultAlphaTex() {
         // Get the main sprite
         p_SpriteRender = GetComponent<SpriteRenderer>();
@@ -83,7 +118,7 @@ public class PaintedField : MonoBehaviour {
         {
             for (int y = (int)offsetY.x; y < range.y - 1; y++)
             {
-                int index = x * (int)range.x + y;
+                int index = x * (int)range.y + y;
 
                 if (index < 0 || index >= p_Circle.Length || index >= color.Length) continue;
 

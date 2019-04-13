@@ -59,8 +59,13 @@
      <Compile Include="Assets\Script\LoadAssetBundle.cs" />
      <Compile Include="Assets\Script\PaintedField.cs" />
      <Compile Include="Assets\Script\PlayerController.cs" />
+     <Compile Include="Assets\Script\Result.cs" />
+     <None Include="Assets\material\shineRing.shader" />
      <None Include="Assets\StreamingAssets\config.txt" />
+     <None Include="Assets\material\spriteOutline.shader" />
+     <None Include="Assets\material\Dissolve.shader" />
      <None Include="Assets\material\Sprites-Mask.shader" />
+     <None Include="Assets\material\distorBall.shader" />
  <Reference Include="UnityEditor.StandardEvents">
  <HintPath>C:/Users/yushiang/Desktop/GP_B10515011_HW2/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
  </Reference>

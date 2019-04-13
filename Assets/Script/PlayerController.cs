@@ -8,27 +8,31 @@ public class PlayerController : NetworkBehaviour
     [SyncVar]
     public Color myColor;
     public float speed = 500;
-    public float gunPos = 2;
+    public float gunPos = 1;
     public GameObject bullet;
     public GameObject RepresentCurrentPlayer;
+    public Vector3 startPos;
 
     public float shootCoolDown = 800;
     private float timeStamp = 0;
-
     private string playerID;
-
-   
 
     void Start()
     {
         //隨機分配玩家顏色
         if (isServer)
         {
-            RpcsetColor(GameManager.Instance.colors[
-           (int.Parse(GetComponent<NetworkIdentity>().netId.ToString()) % GameManager.Instance.colors.Length)
-            ]);
+            if (transform.position == GameObject.Find("start1").transform.position) {
+                RpcsetColor(GameManager.Instance.colors[0]);
+            }
+            else if (transform.position == GameObject.Find("start2").transform.position)
+            {
+                RpcsetColor(GameManager.Instance.colors[1]);
+            }
+
         }
 
+        startPos = transform.position;
         RepresentCurrentPlayer.SetActive(isLocalPlayer);
     }
 
@@ -40,9 +44,13 @@ public class PlayerController : NetworkBehaviour
     }
 
     [Command]
-    public void CmdsetColor(Color color)
+    public void CmdDead()
     {
-        RpcsetColor(color);
+        RpcDead();
+    }
+    [ClientRpc]
+    public void RpcDead() {
+        transform.position = startPos;
     }
 
     [ClientRpc]
@@ -59,7 +67,7 @@ public class PlayerController : NetworkBehaviour
     {
         GameObject newBullet = Instantiate(bullet);
         newBullet.transform.position = origion;
-        newBullet.GetComponent<Rigidbody2D>().AddForce(direction * 500);
+        newBullet.GetComponent<Rigidbody2D>().AddForce(direction * 800);
 
         newBullet.GetComponent<Bullet>().mycolor = color;
 
@@ -95,7 +103,7 @@ public class PlayerController : NetworkBehaviour
         //shoot
         if (Input.GetMouseButton(0) && timeStamp > shootCoolDown)
         {
-            Vector3 origion = transform.position + gunDir * gunPos * 3f;
+            Vector3 origion = transform.position + gunDir * gunPos *3f;
             CmdExplode(origion, gunDir, myColor);
             timeStamp = 0;
         }
@@ -114,13 +122,18 @@ public class PlayerController : NetworkBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!isServer) return;
+        Bullet item = collision.gameObject.GetComponent<Bullet>();
+        EraserAI item2 = collision.gameObject.GetComponent<EraserAI>();
+        if (Vector3.Distance(transform.position, startPos)<8.5f ) return;
 
-        GameItem item = collision.gameObject.GetComponent<GameItem>();
-
-        if (item != null)
+        if (item != null && item.mycolor!=myColor)
         {
-            CmdsetColor(item.color);
+            CmdDead();
+        }
+
+        if (item2 != null && item2.mycolor == myColor)
+        {
+            CmdDead();
         }
 
     }

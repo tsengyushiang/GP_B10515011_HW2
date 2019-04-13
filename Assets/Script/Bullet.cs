@@ -17,7 +17,7 @@ public class Bullet : NetworkBehaviour
     public void setColor(Color color)
     {
         mycolor = color;
-        GetComponent<SpriteRenderer>().color = color;
+        GetComponent<SpriteRenderer>().material.SetColor("_Color",color);
     }
 
     void OnCollisionEnter2D(Collision2D collision)

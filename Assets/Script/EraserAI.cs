@@ -13,11 +13,14 @@ public class EraserAI : NetworkBehaviour
 
     [SyncVar]
     public Color mycolor;
+    
+    public void OnEnable() {
 
-    void Start()
-    {      
         mycolor = new Color(0, 0, 0, 0);
         dst = transform.position;
+        GetComponent<SpriteRenderer>().material.SetColor("_Color", mycolor);
+
+
     }
 
     // Update is called once per frame
@@ -56,10 +59,20 @@ public class EraserAI : NetworkBehaviour
         if (!isServer) return;
         Bullet hit = collision.gameObject.GetComponent<Bullet>();
 
-        if (hit) {
-            mycolor = hit.mycolor;
+        if (hit)
+        {
             dst = hit.StartPoint;
+            RpcsetColor(hit.mycolor);
+
         }
+    }
+
+
+    [ClientRpc]
+    public void RpcsetColor(Color color)
+    {
+        mycolor = color;
+        GetComponent<SpriteRenderer>().material.SetColor("_Color", color);
     }
 
 }

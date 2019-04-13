@@ -14,7 +14,7 @@ public class CustomNetworkGUI : NetworkManager
         menu.transform.GetChild(0).gameObject.SetActive(!GetComponent<NetworkManager>().isNetworkActive);
         menu.transform.GetChild(1).gameObject.SetActive(!GetComponent<NetworkManager>().isNetworkActive);
         menu.transform.GetChild(2).gameObject.SetActive(GetComponent<NetworkManager>().isNetworkActive);
-    }
+    }       
 
     public override void OnServerConnect(NetworkConnection conn)
     {
@@ -26,9 +26,8 @@ public class CustomNetworkGUI : NetworkManager
 
         DirectoryInfo directoryInfo = new DirectoryInfo(Application.streamingAssetsPath);
         FileInfo[] configFile = directoryInfo.GetFiles("config.txt");
-        printNetwork();
-
         StreamReader strReader = configFile[0].OpenText();
+
         GetComponent<NetworkManager>().networkPort = int.Parse(strReader.ReadLine());
         GetComponent<NetworkManager>().networkAddress = strReader.ReadLine().Replace('\\', '/');
     }

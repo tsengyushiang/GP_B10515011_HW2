@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class GameManager : NetworkBehaviour {
@@ -9,6 +10,12 @@ public class GameManager : NetworkBehaviour {
     public Color[] colors;
 
     public PaintedField playGround;
+    public Text counter;
+    public GameObject WinerTag;
+
+    const int playTime=30;
+    [SyncVar]
+    private int currentTime;
 
     public Texture2D bullet;
     public Texture2D ghostFootPrint;
@@ -19,13 +26,44 @@ public class GameManager : NetworkBehaviour {
         Instance = this;
     }
 
+    public void OnEnable() {
+        currentTime = playTime;
+
+        
+        InvokeRepeating("CmdUpdateCounter", 1f, 1f);
+    }
+
     public void OnDisable() {
+        currentTime = playTime;
         playGround.setDefaultAlphaTex();
+        WinerTag.SetActive(false);
+        CancelInvoke();
+
+    }
+
+    [Command]
+    public void CmdUpdateCounter()
+    {
+        if(isServer)
+        RpcUpdateCounter();
+    }
+    [ClientRpc]
+    public void RpcUpdateCounter()
+    {
+        currentTime--;
+        counter.text = currentTime.ToString();
+        if (currentTime == 0) {
+            counter.text = "";
+            CancelInvoke();
+            WinerTag.SetActive(true);
+            WinerTag.GetComponent<Result>().setColor(playGround.CalcResult());
+        }
     }
 
     [ClientRpc]
     public void RpcReStart()
     {
+        currentTime = playTime;
         playGround.setDefaultAlphaTex();
     }
 

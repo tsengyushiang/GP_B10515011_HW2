@@ -13,19 +13,23 @@ public class LoadAssetBundle : MonoBehaviour {
 
         p_AssetBundle = www.assetBundle;
 
-        Texture2D obj_Texture = p_AssetBundle.LoadAsset("Monster") as Texture2D;
-
-        if (obj_Texture != null)
+        if (p_AssetBundle != null)
         {
-            Sprite s = Sprite.Create(obj_Texture, new Rect(0, 0, obj_Texture.width, obj_Texture.height), Vector2.zero);
-            GetComponent<SpriteRenderer>().sprite = s;
-        }
 
-        AudioClip obj_bgm = p_AssetBundle.LoadAsset("bgm") as AudioClip;
-        if (obj_bgm != null)
-        {
-            GetComponent<AudioSource>().clip = obj_bgm;
-            GetComponent<AudioSource>().Play();
+            Texture2D obj_Texture = p_AssetBundle.LoadAsset("Monster") as Texture2D;
+
+            if (obj_Texture != null)
+            {
+                Sprite s = Sprite.Create(obj_Texture, new Rect(0, 0, obj_Texture.width, obj_Texture.height), Vector2.zero);
+                GetComponent<SpriteRenderer>().sprite = s;
+            }
+
+            AudioClip obj_bgm = p_AssetBundle.LoadAsset("bgm") as AudioClip;
+            if (obj_bgm != null)
+            {
+                GetComponent<AudioSource>().clip = obj_bgm;
+                GetComponent<AudioSource>().Play();
+            }
         }
     }
 
