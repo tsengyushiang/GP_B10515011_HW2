@@ -1,0 +1,21 @@
+ManifestFileVersion: 0
+CRC: 4125735349
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 8bf9754dd4d21bf88ad006ba8fd85180
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 70f111f1c28ff40112aba7d472254211
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 83
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Bgm.mp3
+- Assets/Monster.png
+Dependencies: []
